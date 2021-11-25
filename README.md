@@ -1,4 +1,6 @@
 # chess-remake
 My first relatively massive project.
 
-An experiment in recreating the game of chess.
+An attempt to recreate the game of chess.
+
+An experiment in abstraction and conceptual thinking.
