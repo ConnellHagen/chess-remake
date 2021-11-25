@@ -1,4 +1,4 @@
-# chess-remake
+# Chess (remake)
 My first relatively massive project.
 
 An attempt to recreate the game of chess.
