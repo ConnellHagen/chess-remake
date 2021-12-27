@@ -5,3 +5,7 @@ html, body {
 canvas {
   display: block;
 }
+#display-game{
+  width: 100%;
+  height: 100%;
+}

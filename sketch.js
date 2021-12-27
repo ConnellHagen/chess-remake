@@ -1,3 +1,6 @@
+var WIDTH;
+var HEIGHT;
+
 var mainBoard;
 var pieceImg;
 var tempPiece;
@@ -9,9 +12,18 @@ var tempTurn
 var yellowSquares = new Array(4);
 var oldCoords;
 
+setup = () => {
+  
+  if(windowWidth >= windowHeight){
+    WIDTH = windowHeight;
+    HEIGHT = windowHeight;
+  }else{
+    WIDTH = windowWidth;
+    HEIGHT = windowWidth;
+  }
 
-function setup() {
-  createCanvas(1280 , 720);
+  var canvas = createCanvas(WIDTH, HEIGHT);
+  canvas.parent('display-game');
   
   //makes the pieces array to insert into 
   let pieces = new Array(8);
@@ -38,7 +50,7 @@ function setup() {
  
 }
 
-function draw() {
+draw = () => {
   background(220);
   mainBoard.display();
 }
@@ -62,16 +74,16 @@ class Board{
     
     //makes the board
     fill(this.color1[0],this.color1[1],this.color1[2]);
-    square(320,40,640);
+    square(WIDTH/10, WIDTH/10, 4 * WIDTH/5);
     fill(this.color2[0],this.color2[1],this.color2[2]);
     for(let i=0;i<8;i+=2){
       for(let j=0;j<8;j+=2){
-        square(320+j*80,40+i*80,80);
+        square(WIDTH/10 + i * (WIDTH/10), WIDTH/10 + j * (WIDTH/10), (WIDTH/10));
       }
     }
-    for(let i=1;i<8;i+=2){
-      for(let j=1;j<8;j+=2){
-        square(320+j*80,40+i*80,80);
+    for(let i = 1; i < 8; i += 2){
+      for(let j = 1; j < 8; j += 2){
+        square(WIDTH/10 + i * (WIDTH/10), WIDTH/10 + j * (WIDTH/10), (WIDTH/10));
       }
     }
     
@@ -80,27 +92,28 @@ class Board{
     let color1;
     let color2;
     
-    if((yellowSquares[0]+yellowSquares[1])%2==0){
-      color1 = color(220,220,120);
+    if((yellowSquares[0] + yellowSquares[1]) % 2 == 0){
+      color1 = color(220, 220, 120);
     }else{
-      color1 = color(190,190,90);
+      color1 = color(190, 190, 90);
     }
     fill(color1);
-    square(320+yellowSquares[0]*80,40+yellowSquares[1]*80,80);
+  
+    square(WIDTH/10 + yellowSquares[0] * (WIDTH/10), WIDTH/10 + yellowSquares[1] * (WIDTH/10), WIDTH/10);
 
     
 
-    if((yellowSquares[2]+yellowSquares[3])%2==0){
-      color2 = color(220,220,120);
+    if((yellowSquares[2] + yellowSquares[3]) % 2 == 0){
+      color2 = color(220, 220, 120);
     }else{
-      color2 = color(190,190,90);
+      color2 = color(190, 190, 90);
     }
     fill(color2);
-    square(320+yellowSquares[2]*80,40+yellowSquares[3]*80,80);
+    square(WIDTH/10 + yellowSquares[2] * (WIDTH/10), WIDTH/10 + yellowSquares[3] * (WIDTH/10), WIDTH/10);
     
     //displays all pieces located in the this.pieces array
-    for(let i=0; i<8; i++){
-      for(let j=0;j<8;j++){
+    for(let i = 0; i < 8; i++){
+      for(let j = 0; j < 8; j++){
         this.getPieceList()[i][j].display();
       }
     }
@@ -328,7 +341,7 @@ class Board{
     
     //bishop rules
     case('bishop'):
-              //tests if the new square is diagonal
+      //tests if the new square is diagonal
       let isDiag;
       for(let x=-8; x<8; x++){
         if((pieceA.getPos()[0]+x==squareB[0] || pieceA.getPos()[0]-x==squareB[0]) && (pieceA.getPos()[1]+x==squareB[1] || pieceA.getPos()[1]-x==squareB[1])){
@@ -339,7 +352,7 @@ class Board{
         return false;
       }
       
-      //tests if there is a piece in the way
+        //tests if there is a piece in the way
         if(pieceA.getPos()[0]>squareB[0]){
           
           //move up and left
@@ -380,14 +393,14 @@ class Board{
       
       //default return statement
       return true;
-      //compiler thinks `break` here is a mistake but i dont care im right as always
+      //compiler thinks `break` here is a mistake but i dont care im right (as always)
       break;
     
     //rook rules
     case('rook'):
         
       //tests straight line movement
-      if(squareB[0]!=pieceA.getPos()[0] && squareB[1]!=pieceA.getPos()[1]){
+      if(squareB[0] != pieceA.getPos()[0] && squareB[1] != pieceA.getPos()[1]){
         return false;
       }
       
@@ -395,13 +408,13 @@ class Board{
       if(squareB[0]!=pieceA.getPos()[0]){
         if(squareB[0]>pieceA.getPos()[0]){
           for(let i = pieceA.getPos()[0] + 1; i<squareB[0]; i++){
-            if(tempBoard[i][squareB[1]].getColor()!='void'){
+            if(tempBoard[i][squareB[1]].getColor() != 'void'){
                return false;
             }
           }
         }else{
           for(let i = pieceA.getPos()[0] - 1; i>squareB[0]; i--){
-            if(tempBoard[i][squareB[1]].getColor()!='void'){
+            if(tempBoard[i][squareB[1]].getColor() != 'void'){
                return false;
             }
           }
@@ -409,13 +422,13 @@ class Board{
       }else if(squareB[1]!=pieceA.getPos()[1]){
         if(squareB[1]>pieceA.getPos()[1]){
           for(let i = pieceA.getPos()[1] + 1; i<squareB[1]; i++){
-            if(tempBoard[squareB[0]][i].getColor()!='void'){
+            if(tempBoard[squareB[0]][i].getColor() != 'void'){
                return false;
             }
           }
         }else{
           for(let i = pieceA.getPos()[1] - 1; i>squareB[1]; i--){
-            if(tempBoard[squareB[0]][i].getColor()!='void'){
+            if(tempBoard[squareB[0]][i].getColor() != 'void'){
                return false;
             }
           }
@@ -449,13 +462,13 @@ class Board{
         if(squareB[0]!=pieceA.getPos()[0]){
           if(squareB[0]>pieceA.getPos()[0]){
             for(let i = pieceA.getPos()[0] + 1; i<squareB[0]; i++){
-              if(tempBoard[i][squareB[1]].getColor()!='void'){
+              if(tempBoard[i][squareB[1]].getColor() != 'void'){
                return false;
               }
             }
           }else{
             for(let i = pieceA.getPos()[0] - 1; i>squareB[0]; i--){
-              if(tempBoard[i][squareB[1]].getColor()!='void'){
+              if(tempBoard[i][squareB[1]].getColor() != 'void'){
                 return false;
               }
             }
@@ -463,19 +476,20 @@ class Board{
         }else if(squareB[1]!=pieceA.getPos()[1]){
           if(squareB[1]>pieceA.getPos()[1]){
             for(let i = pieceA.getPos()[1] + 1; i<squareB[1]; i++){
-              if(tempBoard[squareB[0]][i].getColor()!='void'){
+              if(tempBoard[squareB[0]][i].getColor() != 'void'){
                return false;
               }
             }
           }else{
             for(let i = pieceA.getPos()[1] - 1; i>squareB[1]; i--){
-              if(tempBoard[squareB[0]][i].getColor()!='void'){
+              if(tempBoard[squareB[0]][i].getColor() != 'void'){
                 return false;
               }
             }
           }
         }
-      }else if(diagLine){
+      }
+      else if(diagLine){
         
         //stolen from the bishop line
         if(pieceA.getPos()[0]>squareB[0]){
@@ -489,7 +503,8 @@ class Board{
             }
             
           //move down and left
-          }else{
+          }
+          else{
             for(let x=1; x+squareB[0] < pieceA.getPos()[0]; x++){
               if(tempBoard[pieceA.getPos()[0] - x][pieceA.getPos()[1] + x].getPiece()!='void'){
                 return false;
@@ -498,7 +513,8 @@ class Board{
           }
          
         //move up and right
-        }else{
+        }
+        else{
           if(pieceA.getPos()[1]>squareB[1]){
             for(let x=1; squareB[0] > x+pieceA.getPos()[0]; x++){
               if(tempBoard[pieceA.getPos()[0] + x][pieceA.getPos()[1] - x].getPiece()!='void'){
@@ -507,7 +523,8 @@ class Board{
             }
             
           //move down and right
-          }else{
+          }
+          else{
             for(let x=1; squareB[0] > x+pieceA.getPos()[0]; x++){
               if(tempBoard[pieceA.getPos()[0] + x][pieceA.getPos()[1] + x].getPiece()!='void'){
                 return false;
@@ -523,12 +540,12 @@ class Board{
      
     //king rules
     case('king'):
-      if(Math.abs(pieceA.getPos()[0]-squareB[0])<=1 && Math.abs(pieceA.getPos()[1]-squareB[1])<=1){
+      if(Math.abs(pieceA.getPos()[0] - squareB[0]) <= 1 && Math.abs(pieceA.getPos()[1] - squareB[1]) <= 1){
         return true;
-      }else if(pieceA.castle()==true){
+      }
+      else if(pieceA.castle()==true){
         
         //castling
-        
         if(this.turn=='white'){
           if(squareB[0]==6 && squareB[1]==7){
             if(tempBoard[7][7].castle()){
@@ -536,14 +553,16 @@ class Board{
               //test if spaces between are empty
               if(tempBoard[6][7].getPiece()!='void' || tempBoard[5][7].getPiece()!='void'){
                 return false;
-              }else{
+              }
+              else{
                 if(this.isInCheckNext(pieceA, [5,7]) || this.isInCheckNext(pieceA, [6,7])){
                   return false;
                 }
                 return 'castle';
               }
             }
-          }else if(squareB[0]==2 && squareB[1]==7){
+          }
+          else if(squareB[0]==2 && squareB[1]==7){
             if(tempBoard[0][7].castle()){
               
               if(tempBoard[1][7].getPiece()!='void' || tempBoard[2][7].getPiece()!='void' || tempBoard[3][7].getPiece()!='void'){
@@ -557,7 +576,8 @@ class Board{
           }
           
         //black castles
-        }else{
+        }
+        else{
           if(squareB[0]==6 && squareB[1]==0){
             if(tempBoard[7][0].castle()){
               if(tempBoard[6][0].getPiece()!='void' || tempBoard[5][0].getPiece()!='void'){
@@ -568,7 +588,8 @@ class Board{
               }
               return 'castle';
             }
-          }else if(squareB[0]==2 && squareB[1]==0){
+          }
+          else if(squareB[0]==2 && squareB[1]==0){
             if(tempBoard[0][0].castle()){
               if(tempBoard[1][0].getPiece()!='void' || tempBoard[2][0].getPiece()!='void' || tempBoard[3][0].getPiece()!='void'){
                 return false;
@@ -581,9 +602,8 @@ class Board{
           }
         }
       }
-        
     
-    return false;
+      return false;
       break;
         
     //empty square pushed through catcher
@@ -635,104 +655,79 @@ class Board{
     let board = this.getPieceList();
     
     //if king
-    if(
-      (board[clamp(a,0,7)][clamp(b-1,0,7)].getPiece()=='king' && board[clamp(a,0,7)][clamp(b-1,0,7)].getColor() != this.getTurn()) ||
-      (board[clamp(a+1,0,7)][clamp(b-1,0,7)].getPiece()=='king' && board[clamp(a+1,0,7)][clamp(b-1,0,7)].getColor() != this.getTurn()) ||
-      (board[clamp(a+1,0,7)][clamp(b,0,7)].getPiece()=='king' && board[clamp(a+1,0,7)][clamp(b,0,7)].getColor() != this.getTurn()) ||
-      (board[clamp(a+1,0,7)][clamp(b+1,0,7)].getPiece()=='king' && board[clamp(a+1,0,7)][clamp(b+1,0,7)].getColor() != this.getTurn()) ||
-      (board[clamp(a,0,7)][clamp(b+1,0,7)].getPiece()=='king' && board[clamp(a,0,7)][clamp(b+1,0,7)].getColor() != this.getTurn()) ||
-      (board[clamp(a-1,0,7)][clamp(b+1,0,7)].getPiece()=='king' && board[clamp(a-1,0,7)][clamp(b+1,0,7)].getColor() != this.getTurn()) ||
-      (board[clamp(a-1,0,7)][clamp(b,0,7)].getPiece()=='king' && board[clamp(a-1,0,7)][clamp(b,0,7)].getColor() != this.getTurn()) ||
-      (board[clamp(a-1,0,7)][clamp(b-1,0,7)].getPiece()=='king' && board[clamp(a-1,0,7)][clamp(b-1,0,7)].getColor() != this.getTurn())
-      ){
-
-       return true;
-    }
-    
+    if(a <= 6 && b <= 6) {if(board[a + 1][b + 1].getPiece() == 'king' && board[a + 1][b + 1].getColor() != this.getTurn()) return true;}
+    if(a <= 6 && b >= 1) {if(board[a + 1][b - 1].getPiece() == 'king' && board[a + 1][b - 2].getColor() != this.getTurn()) return true;}
+    if(a >= 1 && b <= 6) {if(board[a - 1][b + 1].getPiece() == 'king' && board[a - 1][b + 1].getColor() != this.getTurn()) return true;}
+    if(a >= 1 && b >= 1) {if(board[a - 1][b - 1].getPiece() == 'king' && board[a - 1][b - 1].getColor() != this.getTurn()) return true;}
+    if(a <= 6) {if(board[a + 1][b].getPiece() == 'king' && board[a + 1][b].getColor() != this.getTurn()) return true;}
+    if(a >= 1) {if(board[a - 1][b].getPiece() == 'king' && board[a - 1][b].getColor() != this.getTurn()) return true;}
+    if(b <= 6) {if(board[a][b + 1].getPiece() == 'king' && board[a][b + 1].getColor() != this.getTurn()) return true;}
+    if(b >= 1) {if(board[a][b - 1].getPiece() == 'king' && board[a][b - 1].getColor() != this.getTurn()) return true;}
     
     //if pawn
-    if(((board[clamp(a+1,0,7)][clamp(b-1,0,7)].getPiece()=='pawn' && board[clamp(a+1,0,7)][clamp(b-1,0,7)].getColor()=='black')|| (board[clamp(a-1,0,7)][clamp(b-1,0,7)].getPiece()=='pawn' && board[clamp(a-1,0,7)][clamp(b-1,0,7)].getColor()=='black')) &&(this.getTurn()=='white')){
-      
-
-      return true;
+    if(this.getTurn() == 'white'){
+      if(a <= 6 && b >= 1) {if(board[a + 1][b - 1].getPiece() == 'pawn' && board[a + 1][b - 1].getColor() == 'black') return true;}
+      if(a >= 1 && b >= 1) {if(board[a - 1][b - 1].getPiece() == 'pawn' && board[a - 1][b - 1].getColor() == 'black') return true;}
     }
-    else if(((board[clamp(a+1,0,7)][clamp(b+1,0,7)].getPiece()=='pawn' && board[clamp(a+1,0,7)][clamp(b+1,0,7)].getColor()=='white')|| (board[clamp(a-1,0,7)][clamp(b+1,0,7)].getPiece()=='pawn' && board[clamp(a-1,0,7)][clamp(b+1,0,7)].getColor()=='white')) && (this.getTurn()=='black')){
-
-      return true;
+    else if(this.getTurn() == 'black'){
+      if(a <= 6 && b <= 6) {if(board[a + 1][b + 1].getPiece() == 'pawn' && board[a + 1][b + 1].getColor() == 'white') return true;}
+      if(a >= 1 && b <= 6) {if(board[a - 1][b + 1].getPiece() == 'pawn' && board[a - 1][b + 1].getColor() == 'white') return true;}
     }
     
     //if knight
-    if((board[clamp(a+1,0,7)][clamp(b+2,0,7)].getPiece()=='knight' && board[clamp(a+1,0,7)][clamp(b+2,0,7)].getColor() != this.getTurn()) || (board[clamp(a+2,0,7)][clamp(b+1,0,7)].getPiece()=='knight' && board[clamp(a+2,0,7)][clamp(b+1,0,7)].getColor() != this.getTurn()) || (board[clamp(a-1,0,7)][clamp(b+2,0,7)].getPiece()=='knight' && board[clamp(a-1,0,7)][clamp(b+2,0,7)].getColor() != this.getTurn()) || (board[clamp(a+2,0,7)][clamp(b-1,0,7)].getPiece()=='knight' && board[clamp(a+2,0,7)][clamp(b-1,0,7)].getColor() != this.getTurn()) || (board[clamp(a+1,0,7)][clamp(b-2,0,7)].getPiece()=='knight' && board[clamp(a+1,0,7)][clamp(b-2,0,7)].getColor() != this.getTurn()) || (board[clamp(a-2,0,7)][clamp(b+1,0,7)].getPiece()=='knight' && board[clamp(a-2,0,7)][clamp(b+1,0,7)].getColor() != this.getTurn()) || (board[clamp(a-1,0,7)][clamp(b-2,0,7)].getPiece()=='knight' && board[clamp(a-1,0,7)][clamp(b-2,0,7)].getColor() != this.getTurn()) || (board[clamp(a-2,0,7)][clamp(b-1,0,7)].getPiece()=='knight' && board[clamp(a-2,0,7)][clamp(b-1,0,7)].getColor() != this.getTurn())){
-
-      return true;
-    }
+    if(a <= 6 && b <= 5) {if(board[a + 1][b + 2].getPiece() == 'knight' && board[a + 1][b + 2].getColor() != this.getTurn()) return true;}
+    if(a <= 5 && b <= 6) {if(board[a + 2][b + 1].getPiece() == 'knight' && board[a + 2][b + 1].getColor() != this.getTurn()) return true;}
+    if(a >= 1 && b <= 5) {if(board[a - 1][b + 2].getPiece() == 'knight' && board[a - 1][b + 2].getColor() != this.getTurn()) return true;}
+    if(a >= 2 && b <= 6) {if(board[a - 2][b + 1].getPiece() == 'knight' && board[a - 2][b + 1].getColor() != this.getTurn()) return true;}
+    if(a <= 6 && b >= 2) {if(board[a + 1][b - 2].getPiece() == 'knight' && board[a + 1][b - 2].getColor() != this.getTurn()) return true;}
+    if(a <= 5 && b >= 1) {if(board[a + 2][b - 1].getPiece() == 'knight' && board[a + 2][b - 1].getColor() != this.getTurn()) return true;}
+    if(a >= 1 && b >= 2) {if(board[a - 1][b - 2].getPiece() == 'knight' && board[a - 1][b - 2].getColor() != this.getTurn()) return true;}
+    if(a >= 2 && b >= 1) {if(board[a - 2][b - 1].getPiece() == 'knight' && board[a - 2][b - 1].getColor() != this.getTurn()) return true;}
+    
     
     //if piece above
-    if(b>0){
-      for(let i = b-1; i>=0; i--){
-        if(board[a][i].getColor()!='void'){
+    if(b > 0){
+      for(let i = b - 1; i >= 0; i--){
+        if(board[a][i].getColor() != 'void'){
         
-          if((board[a][i].getColor()!=this.getTurn()) && (board[a][i].getPiece()=='rook' || board[a][i].getPiece()=='queen')){
-
-            return true;
-          }
-          else{
-            i-=10;
-          }
+          if((board[a][i].getColor() != this.getTurn()) && (board[a][i].getPiece() == 'rook' || board[a][i].getPiece() == 'queen')) return true;
+          else i -= 10;
         
         }
       }
     }
     
     //if piece right
-    if(a<7){
-      for(let i = a+1; i<=7; i++){
-        if(board[i][b].getColor()!='void'){
+    if(a < 7){
+      for(let i = a + 1; i <= 7; i++){
+        if(board[i][b].getColor() != 'void'){
         
-          if(
-            (board[i][b].getColor()!=this.getTurn()) && 
-            (board[i][b].getPiece()=='rook' || board[i][b].getPiece()=='queen')
-          ){
-
-            return true;
-          }
-          else{
-            i+=10;
-          }
-        
+          if((board[i][b].getColor() != this.getTurn()) && (board[i][b].getPiece() == 'rook' || board[i][b].getPiece() == 'queen')) return true;
+          else i += 10;
+          
         }      
       }
     }
     
     //if piece below
-    if(b<7){
-      for(let i = b+1; i<=7; i++){
-        if(board[a][i].getColor()!='void'){
+    if(b < 7){
+      for(let i = b + 1; i <= 7; i++){
+        if(board[a][i].getColor() != 'void'){
         
-          if((board[a][i].getColor()!=this.getTurn()) && (board[a][i].getPiece()=='rook' || board[a][i].getPiece()=='queen')){
-
-            return true;
-          }
-          else{
-            i+=10;
-          }
+          if((board[a][i].getColor() != this.getTurn()) && (board[a][i].getPiece() == 'rook' || board[a][i].getPiece() == 'queen')) return true;
+          else i += 10;
         
         }      
       }
     }
      
     //if piece left
-    if(a>0){
-      for(let i = a-1; i>=0; i--){
-        if(board[i][b].getColor()!='void'){
+    if(a > 0){
+      for(let i = a - 1; i >= 0; i--){
+        if(board[i][b].getColor() != 'void'){
         
-          if((board[i][b].getColor()!=this.getTurn()) && (board[i][b].getPiece()=='rook' || board[i][b].getPiece()=='queen')){
-
-            return true;
-          }
-          else{
-            i-=10;
-          }
+          if((board[i][b].getColor() != this.getTurn()) && (board[i][b].getPiece() == 'rook' || board[i][b].getPiece() == 'queen')) return true;
+          else i -= 10;
         
         }      
       }
@@ -741,39 +736,29 @@ class Board{
     
     //add checks for when the for loop parameter leads the other parameter out of bounds!!
     
-    let temp = b-1;
+    let temp = b - 1;
     //if piece above right
-    if(a<7 && b>0){
+    if(a < 7 && b > 0){
 
-      for(let i = a+1; i<=7; i++){
-        if(board[i][clamp(temp,0,7)].getColor()!='void' && temp>=0 && temp<=7){
+      for(let i = a + 1; i <= 7; i++){
+        if(board[i][clamp(temp, 0, 7)].getColor() != 'void' && temp >= 0 && temp <= 7){
         
-          if((board[i][clamp(temp,0,7)].getColor()!=this.getTurn()) && (board[i][clamp(temp,0,7)].getPiece()=='bishop' || board[i][clamp(temp,0,7)].getPiece()=='queen')){
-
-            return true;
-          }
-          else{
-            i+=10;
-          }
-        
+          if((board[i][clamp(temp, 0, 7)].getColor() != this.getTurn()) && (board[i][clamp(temp,0,7)].getPiece() == 'bishop' || board[i][clamp(temp,0,7)].getPiece() == 'queen')) return true;
+          else i += 10;
+          
         }
         temp--;
       }
     }
 
     //if piece below right
-    if(a<7 && b<7){
-      temp = b+1;
-      for(let i = a+1; i<=7; i++){
-        if(board[i][clamp(temp,0,7)].getColor()!='void' && temp>=0 && temp<=7){
+    if(a < 7 && b < 7){
+      temp = b + 1;
+      for(let i = a + 1; i <= 7; i++){
+        if(board[i][clamp(temp, 0, 7)].getColor() != 'void' && temp >= 0 && temp <= 7){
         
-          if((board[i][clamp(temp,0,7)].getColor()!=this.getTurn()) && (board[i][clamp(temp,0,7)].getPiece()=='bishop' || board[i][clamp(temp,0,7)].getPiece()=='queen')){
-            
-            return true;
-          }
-          else{
-            i+=10;
-          }
+          if((board[i][clamp(temp, 0, 7)].getColor() != this.getTurn()) && (board[i][clamp(temp, 0, 7)].getPiece() == 'bishop' || board[i][clamp(temp, 0, 7)].getPiece() == 'queen')) return true;
+          else i += 10;
         
         } 
         temp++;
@@ -781,17 +766,13 @@ class Board{
     }
 
     //if piece below left
-    if(a>0 && b<7){
-      temp = b+1; 
-      for(let i = a-1; i>=0; i--){
-        if(board[i][clamp(temp,0,7)].getColor()!='void' && temp>=0 && temp<=7){
+    if(a > 0 && b < 7){
+      temp = b + 1; 
+      for(let i = a - 1; i >= 0; i--){
+        if(board[i][clamp(temp, 0, 7)].getColor() != 'void' && temp >= 0 && temp <= 7){
    
-          if((board[i][clamp(temp,0,7)].getColor() != this.getTurn()) && (board[i][clamp(temp,0,7)].getPiece()=='bishop' || board[i][clamp(temp,0,7)].getPiece()=='queen')){
-            return true;
-          }
-          else{
-            i-=10;
-          }
+          if((board[i][clamp(temp, 0, 7)].getColor() != this.getTurn()) && (board[i][clamp(temp, 0, 7)].getPiece() == 'bishop' || board[i][clamp(temp, 0, 7)].getPiece() == 'queen')) return true;
+          else i -= 10;
         
         }    
         temp++;
@@ -799,18 +780,13 @@ class Board{
     }
     
     //if piece above left
-    if(a>0 && b>0){
-      temp = b-1;
-      for(let i = a-1; i>=0; i--){
-        if(board[i][clamp(temp,0,7)].getColor()!='void' && temp>=0 && temp<=7){
+    if(a > 0 && b > 0){
+      temp = b - 1;
+      for(let i = a - 1; i >= 0; i--){
+        if(board[i][clamp(temp, 0, 7)].getColor() != 'void' && temp >= 0 && temp <= 7){
         
-          if((board[i][clamp(temp,0,7)].getColor()!=this.getTurn()) && (board[i][clamp(temp,0,7)].getPiece()=='bishop' || board[i][clamp(temp,0,7)].getPiece()=='queen')){
-
-            return true;
-          }
-          else{
-            i-=10;
-          }
+          if((board[i][clamp(temp, 0, 7)].getColor() != this.getTurn()) && (board[i][clamp(temp, 0, 7)].getPiece() == 'bishop' || board[i][clamp(temp, 0, 7)].getPiece() == 'queen')) return true;
+          else i-=10;
         
         }  
         temp--;
@@ -825,25 +801,16 @@ class Board{
   isInCheckmate(){
     
     //loops through all pieces on the board, checks if there is still check when moved to any square on the board. If there is no check after a single move, then it is not checkmate
-    for(let i=0; i<this.getPieceList().length; i++){
-      for(let j=0; j<this.getPieceList()[i].length; j++){
+    for(let i = 0; i < this.getPieceList().length; i++){
+      for(let j = 0; j < this.getPieceList()[i].length; j++){
         
         if(this.getPieceList()[i][j].getColor() == this.getTurn()){
           
-          for(let k=0; k<=7; k++){
-            for(let l=0; l<=7; l++){
+          for(let k = 0; k <= 7; k++){
+            for(let l = 0; l <= 7; l++){
               
-              
-              if(this.isLegalMovement(this.getPieceList()[i][j], [k,l])){
+              if(this.isLegalMovement(this.getPieceList()[i][j], [k,l])) {if(!(this.isInCheckNext(this.getPieceList()[i][j], [k,l]))) return false;}
                 
-                if(!(this.isInCheckNext(this.getPieceList()[i][j], [k,l]))){
-                  return false;
-                }
-                
-              }
-              
-
-              
             }
           }
           
@@ -861,73 +828,71 @@ class Board{
     this.removePiece(proPiece.getPos()[0], proPiece.getPos()[1]);
     this.addPiece(proPiece, squareB[0], squareB[1]);
     pawnPMenu = false;
-    if(this.turn=='pwhite'){
-      this.turn='black';
-    }else if(this.turn=='pblack'){
-      this.turn='white';
-    }
+    if(this.turn == 'pwhite') this.turn = 'black';
+    else if(this.turn == 'pblack') this.turn = 'white';
+    
   }
   
   pawnMenu(){
     noStroke();
     fill(110);
-    square(200,280,80);
-    square(120,360,80);
+    square(3 * WIDTH/10, 0, WIDTH/10);
+    square(5 * WIDTH/10, 0, WIDTH/10);
     fill(150);
-    square(200,360,80);
-    square(120,280,80);
-    if(this.turn=='white' || this.turn=='pwhite'){
-      this.turn='pwhite';
-      image(whiteQueen, 120, 280, 80, 80);
-      image(whiteKnight, 200, 280, 80, 80);
-      image(whiteRook, 120, 360, 80, 80);
-      image(whiteBishop, 200, 360, 80, 80);
+    square(4 * WIDTH/10, 0, WIDTH/10);
+    square(6 * WIDTH/10, 0, WIDTH/10);
+    if(this.turn == 'white' || this.turn == 'pwhite'){
+      this.turn = 'pwhite';
+      image(whiteQueen, 3 * WIDTH/10, 0, WIDTH/10, WIDTH/10);
+      image(whiteRook, 4 * WIDTH/10, 0, WIDTH/10, WIDTH/10);
+      image(whiteKnight, 5 * WIDTH/10, 0, WIDTH/10, WIDTH/10);
+      image(whiteBishop, 6 * WIDTH/10, 0, WIDTH/10, WIDTH/10);
     }
-    if(this.turn=='black' || this.turn=='pblack'){
-      this.turn='pblack';
-      image(blackQueen, 120, 280, 80, 80);
-      image(blackKnight, 200, 280, 80, 80);
-      image(blackRook, 120, 360, 80, 80);
-      image(blackBishop, 200, 360, 80, 80);
+    if(this.turn == 'black' || this.turn == 'pblack'){
+      this.turn = 'pblack';
+      image(blackQueen, 3 * WIDTH/10, 0, WIDTH/10, WIDTH/10);
+      image(blackRook, 4 * WIDTH/10, 0, WIDTH/10, WIDTH/10);
+      image(blackKnight, 5 * WIDTH/10, 0, WIDTH/10, WIDTH/10);
+      image(blackBishop, 6 * WIDTH/10, 0, WIDTH/10, WIDTH/10);
     }
   }
   
   doCastle(pieceA, squareB){
-    if(squareB[0]==6 && squareB[1]==7){
-      this.addPiece(new Square('white',[5,7],'rook'), 5, 7);
-      this.removePiece(7,7);
-    }else if(squareB[0]==2 && squareB[1]==7){
-      this.addPiece(new Square('white',[3,7],'rook'), 3, 7);
-      this.removePiece(0,7);
-    }else if(squareB[0]==6 && squareB[1]==0){
-      this.addPiece(new Square('black',[5,0],'rook'), 5, 0);
-      this.removePiece(7,0);
-    }else if(squareB[0]==2 && squareB[1]==0){
-      this.addPiece(new Square('black',[3,0],'rook'), 3, 0);
-      this.removePiece(0,0);
+    if(squareB[0] == 6 && squareB[1] == 7){
+      this.addPiece(new Square('white', [5,7], 'rook'), 5, 7);
+      this.removePiece(7, 7);
+    }else if(squareB[0] == 2 && squareB[1] == 7){
+      this.addPiece(new Square('white', [3,7], 'rook'), 3, 7);
+      this.removePiece(0, 7);
+    }else if(squareB[0] == 6 && squareB[1] == 0){
+      this.addPiece(new Square('black', [5,0], 'rook'), 5, 0);
+      this.removePiece(7, 0);
+    }else if(squareB[0] == 2 && squareB[1] == 0){
+      this.addPiece(new Square('black', [3,0], 'rook'), 3, 0);
+      this.removePiece(0, 0);
     }
     this.makeMove(pieceA, squareB);
-    Board.lastMove([tempPiece.getPos()[0],tempPiece.getPos()[1]],[squareB[0], squareB[1]]);
+    Board.lastMove([tempPiece.getPos()[0], tempPiece.getPos()[1]], [squareB[0], squareB[1]]);
     this.switchTurn();
 
   }
   
   enPassant(pieceA, squareB){
-    if(this.turn=='white'){
-      this.removePiece(squareB[0], squareB[1]+1);
-    }else if(this.turn=='black'){
-      this.removePiece(squareB[0], squareB[1]-1);
+    if(this.turn == 'white'){
+      this.removePiece(squareB[0], squareB[1] + 1);
+    }else if(this.turn == 'black'){
+      this.removePiece(squareB[0], squareB[1] - 1);
     }
     this.removePiece(pieceA.getPos()[0], pieceA.getPos()[1]);
     this.makeMove(pieceA, squareB);
-    Board.lastMove([tempPiece.getPos()[0],tempPiece.getPos()[1]],[squareB[0], squareB[1]]);
+    Board.lastMove([tempPiece.getPos()[0], tempPiece.getPos()[1]], [squareB[0], squareB[1]]);
     this.switchTurn();
   }
   
   makeMove(pieceA, squareB){
-    let kingCoords = this.getKingCoords();
-    if(squareB == kingCoords){
-      return;
+    if(pieceA.getPiece() != 'king'){
+      let kingCoords = this.getKingCoords();
+      if(squareB[0] == kingCoords[0] && squareB[1] == kingCoords[1]) return;
     }
     
     this.removePiece(pieceA.getPos()[0], pieceA.getPos()[1]);
@@ -944,38 +909,38 @@ class Board{
   resetBoard(){
     
     //default configuration for a game
-    for(let i=0; i<8; i++){
-      for(let j=0; j<8; j++){
-        this.pieces[i][j] = new Square('void', [i,j], 'void');
+    for(let i = 0; i < 8; i++){
+      for(let j = 0; j < 8; j++){
+        this.pieces[i][j] = new Square('void', [i, j], 'void');
       }
     }
-    for(let i=0; i<8; i++){
-      this.pieces[i][6] = new Square('white', [i,6], 'pawn');
+    for(let i = 0; i < 8; i++){
+      this.pieces[i][6] = new Square('white', [i, 6], 'pawn');
     }
-    for(let i=0; i<8; i++){
-      this.pieces[i][1] = new Square('black', [i,1], 'pawn');
+    for(let i = 0; i < 8; i++){
+      this.pieces[i][1] = new Square('black', [i, 1], 'pawn');
     }
-    this.pieces[0][0] = new Square('black', [0,0], 'rook');
+    this.pieces[0][0] = new Square('black', [0, 0], 'rook');
     this.pieces[0][0].allowCastle();
-    this.pieces[7][0] = new Square('black', [7,0], 'rook');
+    this.pieces[7][0] = new Square('black', [7, 0], 'rook');
     this.pieces[7][0].allowCastle();
-    this.pieces[0][7] = new Square('white', [0,7], 'rook');
+    this.pieces[0][7] = new Square('white', [0, 7], 'rook');
     this.pieces[0][7].allowCastle();
-    this.pieces[7][7] = new Square('white', [7,7], 'rook');
+    this.pieces[7][7] = new Square('white', [7, 7], 'rook');
     this.pieces[7][7].allowCastle();
-    this.pieces[1][0] = new Square('black', [1,0], 'knight');
-    this.pieces[6][0] = new Square('black', [6,0], 'knight');
-    this.pieces[1][7] = new Square('white', [1,7], 'knight');
-    this.pieces[6][7] = new Square('white', [6,7], 'knight');
-    this.pieces[2][0] = new Square('black', [2,0], 'bishop');
-    this.pieces[5][0] = new Square('black', [5,0], 'bishop');
-    this.pieces[2][7] = new Square('white', [2,7], 'bishop');
-    this.pieces[5][7] = new Square('white', [5,7], 'bishop');
-    this.pieces[3][0] = new Square('black', [3,0], 'queen');
-    this.pieces[3][7] = new Square('white', [3,7], 'queen');
-    this.pieces[4][0] = new Square('black', [4,0], 'king');
+    this.pieces[1][0] = new Square('black', [1, 0], 'knight');
+    this.pieces[6][0] = new Square('black', [6, 0], 'knight');
+    this.pieces[1][7] = new Square('white', [1, 7], 'knight');
+    this.pieces[6][7] = new Square('white', [6, 7], 'knight');
+    this.pieces[2][0] = new Square('black', [2, 0], 'bishop');
+    this.pieces[5][0] = new Square('black', [5, 0], 'bishop');
+    this.pieces[2][7] = new Square('white', [2, 7], 'bishop');
+    this.pieces[5][7] = new Square('white', [5, 7], 'bishop');
+    this.pieces[3][0] = new Square('black', [3, 0], 'queen');
+    this.pieces[3][7] = new Square('white', [3, 7], 'queen');
+    this.pieces[4][0] = new Square('black', [4, 0], 'king');
     this.pieces[4][0].allowCastle();
-    this.pieces[4][7] = new Square('white', [4,7], 'king');
+    this.pieces[4][7] = new Square('white', [4, 7], 'king');
     this.pieces[4][7].allowCastle();
   }
   
@@ -993,7 +958,7 @@ class Square {
   }
   
   display(){
-    if(this.sqColor=='black'){
+    if(this.sqColor == 'black'){
       switch(this.piece){
         case 'pawn':
           pieceImg = blackPawn;
@@ -1045,9 +1010,9 @@ class Square {
       }
     }
     if(this.isDrag){
-      image(pieceImg,mouseX-offDrag[0],mouseY-offDrag[1],80,80);
+      image(pieceImg, mouseX - offDrag[0], mouseY - offDrag[1], WIDTH/10, WIDTH/10);
     }else{
-      image(pieceImg,320 + 80*this.sqLocation[0],40 + this.sqLocation[1]*80,80,80);
+      image(pieceImg, WIDTH/10 + (WIDTH/10) * this.sqLocation[0], WIDTH/10 + (WIDTH/10) * this.sqLocation[1], WIDTH/10, WIDTH/10);
     }
   }
   
@@ -1076,7 +1041,7 @@ class Square {
   }
   
   allowCastle(){
-    this.canCastle=true;
+    this.canCastle = true;
   }
   
   castle(){
@@ -1086,51 +1051,40 @@ class Square {
 }
 
 //input: [xpos, ypos] output: update in terms of board coordinates from 0-7 counted from top left corner
-function getCoords(position){
-  return [Math.floor((position[0] - 320)/80), Math.floor((position[1] - 40)/80)];
+getCoords = position => [Math.floor((position[0] - (WIDTH/10))/(WIDTH/10)), Math.floor((position[1] - (WIDTH/10))/(WIDTH/10))];
+
+mousePressed = () => {
+  if(!pawnPMenu) dragPiece();
 }
 
-function mousePressed(){
-  if(!pawnPMenu){
-    
-    dragPiece();
-    
-  }
- 
-}
-
-function mouseReleased(){
+mouseReleased = () => {
   
   let xCoord = getCoords([mouseX, mouseY])[0];
   let yCoord = getCoords([mouseX, mouseY])[1];
   
   
-  //pawn promotion stuff, tbh i forgot how it works and it looks too scary to try and fix up
+  //pawn promotion
   if(pawnPMenu){
     
-    if(mainBoard.getTurn() == 'pwhite'){
-      tempTurn = 'white'
-    }else if(mainBoard.getTurn() =='pblack'){
-      tempTurn = 'black';
-    }
+    if(mainBoard.getTurn() == 'pwhite') tempTurn = 'white';
+    else if(mainBoard.getTurn() =='pblack') tempTurn = 'black';
     
-    if(mouseX>=120 && mouseX<200){
-      if(mouseY>=280 && mouseY<360){
+    if(mouseY >= 0 && mouseY < WIDTH/10){
+      if(mouseX >= 3*WIDTH/10 && mouseX < 4*WIDTH/10){
         mainBoard.pawnPromotion(new Square(tempTurn, pawnPCoords, 'queen'), pawnPCoords);
         Board.lastMove(oldCoords, pawnPCoords);
-      }else if(mouseY>=360 && mouseY<420){
+      }else if(mouseX >= 4*WIDTH/10 && mouseX < 5*WIDTH/10){
         mainBoard.pawnPromotion(new Square(tempTurn, pawnPCoords, 'rook'), pawnPCoords);
         Board.lastMove(oldCoords, pawnPCoords);
-      }
-    }else if(mouseX>=200 && mouseX <280){
-      if(mouseY>=280 && mouseY<360){
+      }else if(mouseX >= 5 * WIDTH/10 && mouseX < 6 * WIDTH/10){
         mainBoard.pawnPromotion(new Square(tempTurn, pawnPCoords, 'knight'), pawnPCoords);
         Board.lastMove(oldCoords, pawnPCoords);
-      }else if(mouseY>=360 && mouseY<420){
+      }else if(mouseX >= 6 * WIDTH/10 && mouseX < 7 * WIDTH/10){
         mainBoard.pawnPromotion(new Square(tempTurn, pawnPCoords, 'bishop'), pawnPCoords);
         Board.lastMove(oldCoords, pawnPCoords);
       }
     }
+
   }else{
     
     if(tempPiece.getColor() == 'white'){
@@ -1154,7 +1108,7 @@ function mouseReleased(){
   
 }
 
-function makingMove(xCoord, yCoord){
+makingMove = (xCoord, yCoord) => {
   
   switch(mainBoard.isLegalMove(tempPiece, [xCoord, yCoord])){
       
@@ -1167,22 +1121,22 @@ function makingMove(xCoord, yCoord){
       break;
       
     case 'castle':
-      if(mainBoard.isInCheckNext(tempPiece, [tempPiece.getPos()[0],tempPiece.getPos()[1]])){
+      if(mainBoard.isInCheckNext(tempPiece, [tempPiece.getPos()[0], tempPiece.getPos()[1]])){
         mainBoard.addPiece(tempPiece, tempPiece.getPos()[0], tempPiece.getPos()[1]);           
       }
       else{
-        mainBoard.doCastle(tempPiece,[xCoord, yCoord]);
+        mainBoard.doCastle(tempPiece, [xCoord, yCoord]);
       }
       
       break;
       
     case 'en passant':
-      mainBoard.enPassant(tempPiece,[xCoord, yCoord]);
+      mainBoard.enPassant(tempPiece, [xCoord, yCoord]);
       break;
       
     case true:
       mainBoard.makeMove(tempPiece, [xCoord, yCoord]);
-      Board.lastMove([tempPiece.getPos()[0],tempPiece.getPos()[1]],[xCoord, yCoord]);
+      Board.lastMove([tempPiece.getPos()[0], tempPiece.getPos()[1]], [xCoord, yCoord]);
       mainBoard.switchTurn();
       break;
       
@@ -1195,11 +1149,11 @@ function makingMove(xCoord, yCoord){
   
 }
 
-function dragPiece(){
+dragPiece = () => {
   
   let tempPList = mainBoard.getPieceList()
-  let xVal = Math.floor((mouseX - 320)/80);
-  let yVal = Math.floor((mouseY - 40)/80);
+  let xVal = Math.floor((mouseX - (WIDTH/10))/(WIDTH/10));
+  let yVal = Math.floor((mouseY - (WIDTH/10))/(WIDTH/10));
   tempPiece = tempPList[xVal][yVal];
   
   //makes sure that the piece selected is the person whose turn it is
@@ -1221,12 +1175,9 @@ function dragPiece(){
   
   mainBoard.removePiece(xVal,yVal);
   tempPiece.startDrag();
-  offDrag = [mouseX - (xVal * 80 + 320), mouseY - (yVal * 80 +40)];
+  offDrag = [mouseX - (xVal * WIDTH/10 + WIDTH/10), mouseY - (yVal * WIDTH/10 + WIDTH/10)];
   isDrag = true;
-  
   
 }
 
-function clamp(number, min, max) {
-  return Math.max(min, Math.min(number, max));
-}
+clamp = (number, min, max) => Math.max(min, Math.min(number, max));
