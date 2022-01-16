@@ -51,6 +51,15 @@ setup = () => {
 }
 
 draw = () => {
+  if(windowWidth >= windowHeight){
+    WIDTH = windowHeight;
+    HEIGHT = windowHeight;
+  }else{
+    WIDTH = windowWidth;
+    HEIGHT = windowWidth;
+  }
+  resizeCanvas(WIDTH, HEIGHT);
+  
   background(220);
   mainBoard.display();
 }
